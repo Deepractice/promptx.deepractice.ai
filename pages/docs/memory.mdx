@@ -2,6 +2,142 @@
 
 PromptX's cognitive memory system enables AI to remember, learn, and build knowledge over time. Unlike traditional AI that forgets everything after each conversation, PromptX creates a persistent memory network that grows richer with every interaction.
 
+## System Architecture
+
+The cognitive memory system consists of multiple layers working together to enable AI learning and recall:
+
+```mermaid
+graph TB
+    subgraph "AI Interface Layer"
+        A[AI Role] -->|remember| B[Remember API]
+        A -->|recall| C[Recall API]
+    end
+
+    subgraph "Cognition Manager"
+        B --> D[CognitionManager]
+        C --> D
+        D -->|orchestrate| E[CognitionSystem]
+    end
+
+    subgraph "Recall Engine"
+        E -->|query| F[TwoPhaseRecallStrategy]
+        F -->|Phase 1| G[Coarse Recall]
+        F -->|Phase 2| H[Fine Ranking]
+
+        G -->|activate| I[ActivationStrategy]
+        I -->|spread| J[Spreading Activation]
+
+        H -->|rank| K[WeightStrategy]
+        K -->|filter| L[Type Quotas]
+    end
+
+    subgraph "Memory Storage"
+        D -->|store| M[Remember]
+        M -->|build| N[Network]
+        N -->|nodes| O[FrequencyCue]
+        N -->|persist| P[(Network JSON)]
+
+        M -->|create| Q[Engram]
+        Q -->|persist| R[(SQLite DB)]
+    end
+
+    subgraph "Working Memory"
+        F -->|generate| S[Mind]
+        S -->|activated| T[Cues Set]
+        S -->|connections| U[Edges Array]
+        S -->|retrieved| V[Engrams List]
+    end
+
+    subgraph "Configuration"
+        W[ActivationMode] -.->|creative/balanced/focused| I
+        W -.->|params| F
+        X[WeightContext] -.->|context| K
+    end
+
+    style A fill:#4A90E2
+    style D fill:#7B68EE
+    style F fill:#50C878
+    style N fill:#FF6B6B
+    style S fill:#FFB347
+```
+
+**Layer Responsibilities:**
+
+- **AI Interface**: Entry points for AI roles to interact with memory
+- **Cognition Manager**: Orchestrates memory operations and manages role-specific networks
+- **Recall Engine**: Two-phase retrieval with activation spreading and ranking
+- **Memory Storage**: Persistent storage of networks (JSON) and engrams (SQLite)
+- **Working Memory**: Runtime activated subgraph (Mind) during recall
+- **Configuration**: Modes and strategies for different recall behaviors
+
+### Data Flow: Recall vs Remember
+
+```mermaid
+sequenceDiagram
+    participant AI as AI Role
+    participant CM as CognitionManager
+    participant TP as TwoPhaseRecall
+    participant Net as Network
+    participant Mem as Memory (SQLite)
+    participant Rem as Remember
+
+    rect rgb(220, 240, 255)
+        Note over AI,Mem: Recall Flow (Retrieval)
+        AI->>CM: recall(query, mode)
+        CM->>TP: execute(query)
+
+        alt DMN Mode (query = null)
+            TP->>Net: selectHubNodes(15)
+            Net-->>TP: [hub1, hub2, ...]
+        else Single/Multi Query
+            TP->>Net: findBestCue(words)
+            Net-->>TP: centerCue
+        end
+
+        TP->>TP: Phase 1: Activation Spreading
+        TP->>Net: spread from centers
+        Net-->>TP: Mind (activated cues)
+
+        TP->>Mem: loadEngrams(activatedCues)
+        Mem-->>TP: engrams[]
+
+        TP->>TP: Phase 2: Fine Ranking
+        TP->>TP: calculateWeights + applyQuotas
+        TP-->>CM: Mind + ranked engrams
+        CM-->>AI: recall result
+    end
+
+    rect rgb(255, 240, 220)
+        Note over AI,Rem: Remember Flow (Storage)
+        AI->>CM: remember(engrams)
+        CM->>Rem: process(engrams)
+
+        loop Each Engram
+            Rem->>Rem: validate & create Engram
+            Rem->>Rem: extract schema keywords
+
+            loop Each Keyword Pair
+                Rem->>Net: getOrCreateCue(word)
+                Net-->>Rem: Cue
+                Rem->>Net: addConnection(source, target, weight)
+            end
+
+            Rem->>Mem: persist(engram)
+        end
+
+        Rem->>Net: persistSync(network.json)
+        Rem-->>CM: success
+        CM-->>AI: remember complete
+    end
+```
+
+**Key Differences:**
+
+| Operation | Direction | Data Structure | Primary Goal |
+|-----------|-----------|----------------|--------------|
+| **Recall** | Network → Mind → Engrams | Read-only spreading | Retrieve relevant knowledge |
+| **Remember** | Engrams → Network | Write with connection building | Store new knowledge |
+
 ## What is Cognitive Memory?
 
 Think of cognitive memory as AI's **long-term memory and knowledge graph**. Just like how humans remember experiences, concepts, and their relationships, PromptX stores memories in a semantic network where concepts connect and activate each other.
@@ -49,7 +185,7 @@ Each AI role has its own memory network that accumulates knowledge and experienc
    - Example: "First analyze, then design, finally implement"
    - Schema: "analyze design implement"
 
-###Network - Semantic Graph
+### Network - Semantic Graph
 
 The memory network is a **semantic graph** where concepts (nodes) connect with weighted edges based on co-occurrence in engrams.
 

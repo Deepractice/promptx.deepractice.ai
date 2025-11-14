@@ -15,3 +15,6 @@ workers/**/.wrangler/
 .DS_Store
 .idea
 .vscode
+
+# temp
+temp/
