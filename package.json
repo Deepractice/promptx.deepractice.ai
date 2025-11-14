@@ -9,7 +9,12 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "clean": "rimraf .next .turbo node_modules"
+    "clean": "rimraf .next .turbo node_modules",
+    "worker:dev": "cd workers/download && wrangler dev",
+    "worker:deploy": "cd workers/download && wrangler deploy",
+    "deploy:pages": "npm run build && wrangler pages deploy out --project-name=promptx",
+    "deploy:worker": "npm run worker:deploy",
+    "deploy:all": "npm run deploy:pages && npm run deploy:worker"
   },
   "dependencies": {
     "next": "^14.2.0",

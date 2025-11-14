@@ -2,3 +2,16 @@ node_modules/
 .next/
 out/
 .turbo/
+
+# Wrangler
+.wrangler/
+workers/**/.wrangler/
+
+# Environment
+.env
+.env*.local
+
+# IDE
+.DS_Store
+.idea
+.vscode

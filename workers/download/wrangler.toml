@@ -1,0 +1,28 @@
+name = "promptx-download-manager"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# R2 Bucket binding
+[[r2_buckets]]
+binding = "PROMPTX_RELEASES"
+bucket_name = "promptx-releases"
+
+# KV namespace binding (download statistics)
+[[kv_namespaces]]
+binding = "DOWNLOAD_STATS"
+id = "f6ee93c1efc34e7fb3aeb94dc33c87b0"
+
+# Route configuration (MUST be set in Cloudflare Dashboard)
+# Routes cannot be configured in wrangler.toml, you must add them manually:
+#
+# Steps:
+# 1. First, add custom domain to Pages project 'promptx':
+#    Workers & Pages → promptx → Custom domains → Add "promptx.deepractice.ai"
+#
+# 2. Then, add route to this Worker:
+#    Workers & Pages → promptx-download-manager → Settings → Triggers → Routes
+#    Add route: promptx.deepractice.ai/download/*
+#
+# This ensures:
+# - promptx.deepractice.ai/ → Pages (website)
+# - promptx.deepractice.ai/download/* → Worker (download service)

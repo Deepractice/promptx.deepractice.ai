@@ -1,0 +1,11 @@
+name = "promptx"
+pages_build_output_dir = "out"
+compatibility_date = "2024-01-01"
+
+# Custom domain configuration (MUST be set in Cloudflare Dashboard)
+# Go to: Workers & Pages → promptx → Custom domains
+# Add: promptx.deepractice.ai
+#
+# After adding custom domain to Pages, configure Worker route:
+# Workers & Pages → promptx-download-manager → Settings → Triggers → Routes
+# Add route: promptx.deepractice.ai/download/*
