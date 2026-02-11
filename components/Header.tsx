@@ -40,7 +40,7 @@ export function Header() {
             GitHub
           </a>
           <a
-            href="https://discord.gg/promptx"
+            href="https://discord.gg/YJ2U7hr5Xr"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-700 transition-colors hover:text-primary-600"
@@ -108,7 +108,7 @@ export function Header() {
               GitHub
             </a>
             <a
-              href="https://discord.gg/promptx"
+              href="https://discord.gg/YJ2U7hr5Xr"
               target="_blank"
               rel="noopener noreferrer"
               className="block rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100"

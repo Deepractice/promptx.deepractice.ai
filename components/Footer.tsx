@@ -76,7 +76,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="https://discord.gg/promptx"
+                  href="https://discord.gg/YJ2U7hr5Xr"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-600 hover:text-primary-600"

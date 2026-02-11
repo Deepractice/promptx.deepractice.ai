@@ -14,7 +14,7 @@ const config: DocsThemeConfig = {
     link: 'https://github.com/Deepractice/PromptX',
   },
   chat: {
-    link: 'https://discord.gg/rdmPr54K',
+    link: 'https://discord.gg/3CTac6y5tR',
   },
   docsRepositoryBase: 'https://github.com/Deepractice/PromptX/tree/main/apps/website',
   footer: {
