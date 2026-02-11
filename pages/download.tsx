@@ -8,9 +8,10 @@ type Platform = 'mac' | 'windows' | 'linux' | 'unknown';
 
 export default function Download() {
   const [detectedPlatform, setDetectedPlatform] = useState<Platform>('unknown');
-  const latestVersion = '1.27.1';
+  const [latestVersion, setLatestVersion] = useState('1.28.0'); // Fallback version
 
   useEffect(() => {
+    // Detect platform
     const userAgent = window.navigator.userAgent.toLowerCase();
     if (userAgent.includes('mac')) {
       setDetectedPlatform('mac');
@@ -19,6 +20,21 @@ export default function Download() {
     } else if (userAgent.includes('linux')) {
       setDetectedPlatform('linux');
     }
+
+    // Fetch latest version from GitHub
+    fetch('https://api.github.com/repos/Deepractice/PromptX/releases/latest')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.tag_name) {
+          // Remove 'v' prefix if present (e.g., v1.28.0 -> 1.28.0)
+          const version = data.tag_name.replace(/^v/, '');
+          setLatestVersion(version);
+        }
+      })
+      .catch((error) => {
+        console.warn('Failed to fetch latest version from GitHub:', error);
+        // Keep fallback version
+      });
   }, []);
 
   const downloads = {
